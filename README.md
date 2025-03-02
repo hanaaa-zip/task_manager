@@ -13,5 +13,5 @@ A simple Django-based CRUD application to manage tasks, including:
 ## 🔧 Installation Steps
 1. **Clone the repository**  
    ```bash
-   git clone https://github.com/YOUR_USERNAME/task_manager.git
+   git clone https://github.com/hanaaa-zip/task_manager.git
    cd task_manager
