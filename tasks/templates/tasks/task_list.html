@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block content %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        h2 {
+            color: #333;
+        }
+        .task-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .search-container {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .search-container input {
+            padding: 8px;
+            width: 70%;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .search-container button {
+            padding: 8px 12px;
+            border: none;
+            background: #008CBA;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-container button:hover {
+            background: #005f8d;
+        }
+        .task-list {
+            list-style: none;
+            padding: 0;
+        }
+        .task-item {
+            background: white;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #ddd;
+        }
+        .task-info {
+            flex-grow: 1;
+            text-align: left;
+        }
+        .task-title {
+            font-weight: bold;
+        }
+        .task-description {
+            font-size: 12px;
+            color: #666;
+        }
+        .task-due-date {
+            font-size: 10px;
+            color: #999;
+            display: block;
+        }
+        .task-status {
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .pending {
+            background: #f7e34d;
+            color: #7a6400;
+        }
+        .overdue {
+            background: #ff5733;
+            color: white;
+        }
+        .completed {
+            background: #28a745;
+            color: white;
+        }
+        .task-actions a {
+            text-decoration: none;
+            padding: 5px 10px;
+            margin-left: 5px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .edit-btn {
+            background: #4CAF50;
+            color: white;
+        }
+        .delete-btn {
+            background: #FF5733;
+            color: white;
+        }
+        .add-task {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: #008CBA;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+
+    <div class="task-container">
+        <h2>Task List</h2>
+
+        <!-- ✅ Visible Search Bar -->
+        <div class="search-container">
+            <form method="get">
+                <input type="text" name="q" value="{{ query }}" placeholder="Search tasks...">
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <a href="{% url 'task_create' %}" class="add-task">+ Create New Task</a>
+
+        <ul class="task-list">
+            {% for task in tasks %}
+                <li class="task-item">
+                    <div class="task-info">
+                        <span class="task-title">{{ task.title }}</span>
+                        <span class="task-due-date">Due: {{ task.due_date }}</span>
+                        <p class="task-description">
+                            {{ task.description|truncatechars:50 }} <!-- Sneak peek of description -->
+                        </p>
+                    </div>
+                    <span class="task-status 
+                        {% if task.status == 'Pending' %}pending{% elif task.status == 'Overdue' %}overdue{% else %}completed{% endif %}">
+                        {{ task.status }}
+                    </span>
+                    <div class="task-actions">
+                        <a href="{% url 'task_update' task.id %}" class="edit-btn">Edit</a>
+                        <a href="{% url 'task_delete' task.id %}" class="delete-btn">Delete</a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

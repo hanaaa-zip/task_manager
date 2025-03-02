@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        form {
+            background: white;
+            padding: 20px;
+            margin: 20px auto;
+            width: 40%;
+            border-radius: 5px;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+        input, select, textarea {
+            width: 90%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 8px;
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        a {
+            text-decoration: none;
+            color: white;
+            background: red;
+            padding: 8px 12px;
+            border-radius: 5px;
+            margin-top: 10px;
+            display: inline-block;
+        }
+    </style>
+
+    <h2>{% if form.instance.pk %}Edit Task{% else %}Create Task{% endif %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <label for="title">Title:</label>
+        {{ form.title }}
+
+        <label for="description">Description:</label>
+        {{ form.description }}
+
+        <label for="due_date">Due Date:</label>
+        <input type="date" name="due_date" value="{{ form.instance.due_date|date:'Y-m-d' }}" required>
+
+        <label for="status">Status:</label>
+        {{ form.status }}  <!-- ✅ Now a dropdown menu -->
+
+        <button type="submit">Save</button>
+    </form>
+    <a href="{% url 'task_list' %}">Cancel</a>
+{% endblock %}
