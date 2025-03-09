@@ -2,41 +2,46 @@
 {% block content %}
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #F7F6F5;
+            font-family: 'Poppins', sans-serif;
             text-align: center;
         }
         h2 {
-            color: #333;
+            color: #6D597A;
+            font-weight: bold;
         }
         .task-container {
-            max-width: 600px;
+            max-width: 650px;
             margin: 0 auto;
-            background: white;
+            background: #ffffff;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0px 4px 12px rgba(164, 181, 213, 0.4);
+            border: 2px solid #A4B5D5;
         }
         .search-container {
             margin-bottom: 15px;
             text-align: center;
         }
         .search-container input {
-            padding: 8px;
-            width: 70%;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            padding: 10px;
+            width: 75%;
+            border: 2px solid #A4B5D5;
+            border-radius: 8px;
+            background: #F0DFEA;
+            color: #6D597A;
         }
         .search-container button {
-            padding: 8px 12px;
+            padding: 10px 15px;
             border: none;
-            background: #008CBA;
+            background: #A4B5D5;
             color: white;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
+            font-weight: bold;
         }
         .search-container button:hover {
-            background: #005f8d;
+            background: #EABCDD;
         }
         .task-list {
             list-style: none;
@@ -44,13 +49,14 @@
         }
         .task-item {
             background: white;
-            padding: 10px;
-            margin: 8px 0;
-            border-radius: 5px;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid #ddd;
+            border: 2px solid #A4B5D5;
+            box-shadow: 0px 2px 6px rgba(164, 181, 213, 0.4);
         }
         .task-info {
             flex-grow: 1;
@@ -58,10 +64,11 @@
         }
         .task-title {
             font-weight: bold;
+            color: #6D597A;
         }
         .task-description {
             font-size: 12px;
-            color: #666;
+            color: #6D597A;
         }
         .task-due-date {
             font-size: 10px;
@@ -69,60 +76,66 @@
             display: block;
         }
         .task-status {
-            padding: 5px 10px;
-            border-radius: 5px;
+            padding: 6px 12px;
+            border-radius: 6px;
             font-size: 12px;
             font-weight: bold;
         }
-        .pending {
-            background: #f7e34d;
-            color: #7a6400;
-        }
-        .overdue {
-            background: #ff5733;
+        .upcoming {
+            background: #7DB9B6;
             color: white;
         }
-        .completed {
-            background: #28a745;
+        .due-today {
+            background: #EAC696;
+            color: white;
+        }
+        .overdue {
+            background: #E78EA9;
             color: white;
         }
         .task-actions a {
             text-decoration: none;
-            padding: 5px 10px;
-            margin-left: 5px;
-            border-radius: 5px;
+            padding: 6px 12px;
+            margin-left: 6px;
+            border-radius: 6px;
             font-size: 14px;
         }
         .edit-btn {
-            background: #4CAF50;
+            background: #7DB9B6;
             color: white;
         }
         .delete-btn {
-            background: #FF5733;
+            background: #E78EA9;
             color: white;
+        }
+        .edit-btn:hover, .delete-btn:hover {
+            opacity: 0.85;
         }
         .add-task {
             display: block;
             width: 100%;
             text-align: center;
-            background: #008CBA;
+            background: #A4B5D5;
             color: white;
-            padding: 10px;
-            border-radius: 5px;
+            padding: 12px;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: bold;
-            margin-top: 10px;
+            margin-top: 15px;
+        }
+        .add-task:hover {
+            background: #EABCDD;
         }
     </style>
 
     <div class="task-container">
-        <h2>Task List</h2>
+        <h2>Task List 📋</h2>
 
-        <!-- ✅ Visible Search Bar -->
+        <!-- 🔎 Search Bar -->
         <div class="search-container">
             <form method="get">
                 <input type="text" name="q" value="{{ query }}" placeholder="Search tasks...">
-                <button type="submit">Search</button>
+                <button type="submit">🔍</button>
             </form>
         </div>
 
@@ -133,18 +146,18 @@
                 <li class="task-item">
                     <div class="task-info">
                         <span class="task-title">{{ task.title }}</span>
-                        <span class="task-due-date">Due: {{ task.due_date }}</span>
+                        <span class="task-due-date">📅 Due: {{ task.due_date }}</span>
                         <p class="task-description">
-                            {{ task.description|truncatechars:50 }} <!-- Sneak peek of description -->
+                            {{ task.description|truncatechars:50 }}
                         </p>
                     </div>
                     <span class="task-status 
-                        {% if task.status == 'Pending' %}pending{% elif task.status == 'Overdue' %}overdue{% else %}completed{% endif %}">
+                        {% if task.status == 'Upcoming' %}upcoming{% elif task.status == 'Due Today' %}due-today{% else %}overdue{% endif %}">
                         {{ task.status }}
                     </span>
                     <div class="task-actions">
-                        <a href="{% url 'task_update' task.id %}" class="edit-btn">Edit</a>
-                        <a href="{% url 'task_delete' task.id %}" class="delete-btn">Delete</a>
+                        <a href="{% url 'task_update' task.id %}" class="edit-btn">✏️ Edit</a>
+                        <a href="{% url 'task_delete' task.id %}" class="delete-btn">🗑️ Delete</a>
                     </div>
                 </li>
             {% endfor %}
